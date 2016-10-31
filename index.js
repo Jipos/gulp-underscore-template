@@ -13,8 +13,10 @@ module.exports = function (options) {
         var name = typeof options.name === 'function' && options.name(file) || file.relative;
         var html = file.contents.toString();
         var template = _.template(html).source;
+        var exportName = options.exportName || exports;
+        var extension = options.extension || 'html';
 
-        return "exports['" + name.replace(/\.html?$/, '').replace(/\\/g, '/') + "']=" + template + ';';
+        return exportName + "['" + name.replace(new RegExp('\.' + extension + '?$'), '').replace(/\\/g, '/') + "']=" + template + ';';
     }
 
     return through.obj(function (file, enc, callback) {
